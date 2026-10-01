@@ -1,0 +1,19 @@
+# 포트폴리오 시연용 — 키·DB 없이 목 모드로 백엔드만 띄운다.
+# 화면은 Vercel(adapdog-app.whoareryu.cloud), 이 백엔드는 Cloudflare 터널(adapdog-api.whoareryu.cloud)로 나간다.
+#   docker compose -f docker-compose.demo.yaml up -d --build
+# DATABASE_URL 이 없으면 메모리 저장, GEMINI_API_KEY 가 없으면 규칙 기반 폴백(adapdog/.env.example 참고).
+# alembic 은 DATABASE_URL 을 필수로 읽으므로 돌리지 않는다.
+name: adapdog-demo
+
+services:
+  backend:
+    build:
+      context: ./adapdog
+      dockerfile: Dockerfile
+    container_name: adapdog-demo-backend
+    command: uvicorn main:app --host 0.0.0.0 --port 8000
+    ports:
+      - "8600:8000"
+    volumes:
+      - ./csv:/csv:ro
+    restart: unless-stopped
