@@ -41,7 +41,7 @@ export default function DemoBanner() {
         lineHeight: 1.6,
       }}
     >
-      <span style={{ fontWeight: 600 }}>해커톤 참가작 목업</span> — 실제 데이터·AI 미연결
+      <span style={{ fontWeight: 600 }}>해커톤 참가작 목업</span> — 실서비스 데이터·AI 미연결
       {online === false ? (
         <span style={{ color: '#fcd34d' }}>
           {' '}· 데모 서버가 잠시 꺼져 있습니다 —{' '}

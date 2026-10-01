@@ -1,7 +1,7 @@
 # 포트폴리오 시연용 — 로컬 Postgres 에 번들 CSV(공공데이터)를 적재해 API 키 없이 전주 흐름을 살린다.
 # 화면은 Vercel(adapdog-app.whoareryu.cloud), 이 백엔드는 Cloudflare 터널(adapdog-api.whoareryu.cloud)로 나간다.
-#   docker compose -f docker-compose.demo.yaml up -d --build
-#   bash scripts/demo-seed.sh        # 최초 1회(재실행 가능): CSV → 3NF 테이블 적재
+# 순서: ① docker compose -f docker-compose.demo.yaml up -d --build
+#       ② bash scripts/demo-seed.sh   # CSV → 3NF 테이블 적재(재실행 가능, 끝에 백엔드를 스스로 재시작)
 # db 는 포트를 호스트로 열지 않는다(데모 전용 로컬 자격증명). 데이터는 adapdog-demo-pg 볼륨에 남는다.
 # GEMINI_API_KEY 등 외부 키는 필요 없다 — 없으면 규칙 기반 폴백으로 동작한다(adapdog/.env.example 참고).
 name: adapdog-demo
