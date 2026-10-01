@@ -1,19 +1,44 @@
-# 포트폴리오 시연용 — 키·DB 없이 목 모드로 백엔드만 띄운다.
+# 포트폴리오 시연용 — 로컬 Postgres 에 번들 CSV(공공데이터)를 적재해 API 키 없이 전주 흐름을 살린다.
 # 화면은 Vercel(adapdog-app.whoareryu.cloud), 이 백엔드는 Cloudflare 터널(adapdog-api.whoareryu.cloud)로 나간다.
 #   docker compose -f docker-compose.demo.yaml up -d --build
-# DATABASE_URL 이 없으면 메모리 저장, GEMINI_API_KEY 가 없으면 규칙 기반 폴백(adapdog/.env.example 참고).
-# alembic 은 DATABASE_URL 을 필수로 읽으므로 돌리지 않는다.
+#   bash scripts/demo-seed.sh        # 최초 1회(재실행 가능): CSV → 3NF 테이블 적재
+# db 는 포트를 호스트로 열지 않는다(데모 전용 로컬 자격증명). 데이터는 adapdog-demo-pg 볼륨에 남는다.
+# GEMINI_API_KEY 등 외부 키는 필요 없다 — 없으면 규칙 기반 폴백으로 동작한다(adapdog/.env.example 참고).
 name: adapdog-demo
 
 services:
+  db:
+    image: postgres:16-alpine
+    container_name: adapdog-demo-db
+    environment:
+      POSTGRES_USER: adapdog
+      POSTGRES_PASSWORD: adapdog-demo
+      POSTGRES_DB: adapdog
+    volumes:
+      - adapdog-demo-pg:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U adapdog"]
+      interval: 3s
+      timeout: 3s
+      retries: 20
+    restart: unless-stopped
+
   backend:
     build:
       context: ./adapdog
       dockerfile: Dockerfile
     container_name: adapdog-demo-backend
-    command: uvicorn main:app --host 0.0.0.0 --port 8000
+    command: sh -c "alembic upgrade head && uvicorn main:app --host 0.0.0.0 --port 8000"
+    environment:
+      DATABASE_URL: postgresql+psycopg://adapdog:adapdog-demo@db:5432/adapdog
+    depends_on:
+      db:
+        condition: service_healthy
     ports:
       - "8600:8000"
     volumes:
       - ./csv:/csv:ro
     restart: unless-stopped
+
+volumes:
+  adapdog-demo-pg:
