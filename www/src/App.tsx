@@ -284,7 +284,7 @@ export default function App() {
   vars['--mobnav-d'] = isMobile && view === 'planner' ? 'flex' : 'none';
   vars['--fab-lift'] = isMobile && view === 'planner' ? '60px' : '0px';
 
-  const rootStyle: CSSProperties = { position: 'relative', width: '100vw', height: '100vh', background: 'var(--bg)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Pretendard,-apple-system,sans-serif', color: 'var(--text)', transition: 'background .25s', ...(vars as CSSProperties) };
+  const rootStyle: CSSProperties = { position: 'relative', width: '100vw', flex: '1 1 0', minHeight: 0, background: 'var(--bg)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'Pretendard,-apple-system,sans-serif', color: 'var(--text)', transition: 'background .25s', ...(vars as CSSProperties) };
 
   const navItem = (v: typeof view, label: string, icon?: string) => {
     const on = view === v;

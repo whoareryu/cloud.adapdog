@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "https://cloudadapdog-production.up.railway.app/api/:path*"
+      "destination": "https://adapdog-api.whoareryu.cloud/api/:path*"
     }
   ]
 }

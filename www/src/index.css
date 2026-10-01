@@ -1,6 +1,7 @@
 /* 발자국 — standalone 시안 helmet 스타일 이식. 색 토큰/다크모드는 App 루트 인라인에서 주입. */
 * { box-sizing: border-box; }
 html, body, #root { margin: 0; height: 100%; }
+#root { display: flex; flex-direction: column; } /* DemoBanner 아래로 앱이 남은 높이를 채운다 */
 body {
   font-family: Pretendard, -apple-system, BlinkMacSystemFont, sans-serif;
   -webkit-font-smoothing: antialiased;
